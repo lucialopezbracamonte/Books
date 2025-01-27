@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <h1>Search for Books</h1>
+    <form method="POST">
+        <input type="text" name="query" placeholder="Search for a book..." required>
+        <button type="submit">Search</button>
+    </form>
+
+    {% if books %}
+        <h2>Results:</h2>
+        <ul>
+            {% for book in books %}
+                <li>
+                    <img src="{{ book.thumbnail }}" alt="{{ book.title }}" width="50">
+                    <strong>{{ book.title }}</strong> by {{ book.author }}
+                    <form action="{{ url_for('add_book') }}" method="POST">
+                        <input type="hidden" name="title" value="{{ book.title }}">
+                        <input type="hidden" name="author" value="{{ book.author }}">
+                        <input type="hidden" name="description" value="{{ book.description }}">
+                        <input type="hidden" name="thumbnail" value="{{ book.thumbnail }}">
+
+                        <label for="list_type_{{ loop.index }}">Select a List:</label>
+                        <select class="list_type" id="list_type_{{ loop.index }}" name="list_type" required>
+                            <option value="Currently Reading">Currently Reading</option>
+                            <option value="To Be Read">To Be Read</option>
+                            <option value="Read">Read</option>
+                        </select>
+
+                        <!-- Date Read and Star Rating fields (only shown if 'Read' is selected) -->
+                        <div class="additional_fields" id="additional_fields_{{ loop.index }}" style="display:none;">
+                            <label for="date_read_{{ loop.index }}">Date Read:</label>
+                            <input type="date" id="date_read_{{ loop.index }}" name="date_read">
+                            <label for="star_rating_{{ loop.index }}">Star Rating:</label>
+                            <input type="number" id="star_rating_{{ loop.index }}" name="star_rating" min="1" max="5">
+                        </div>
+
+                        <button type="submit">Add to My Library</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    {% elif message %}
+        <p>{{ message }}</p>
+    {% endif %}
+
+    <script>
+        // JavaScript to toggle additional fields based on the selected list type
+        document.querySelectorAll('.list_type').forEach(function(selectElement) {
+            selectElement.addEventListener('change', function() {
+                var form = this.closest('form');
+                var additionalFieldsDiv = form.querySelector('#additional_fields_' + this.id.split('_')[2]);
+                
+                if (this.value === 'Read') {
+                    additionalFieldsDiv.style.display = 'block';
+                } else {
+                    additionalFieldsDiv.style.display = 'none';
+                }
+            });
+        });
+    </script>
+
+{% endblock %}

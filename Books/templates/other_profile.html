@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="profile-container">
+    <h1>{{ user.username }}'s Profile</h1>
+
+    {% if user.favorite_book %}
+        <ul>
+            <h3>{{ user.username }}'s current favorite book:</h3>
+            <li class="favorite-book">
+                <img src="{{ user.favorite_book.thumbnail_url }}" alt="{{ user.favorite_book.title }}" width="50">
+                <strong>{{ user.favorite_book.title }} by {{ user.favorite_book.author }}</strong>
+            </li>
+        </ul>
+    {% else %}
+        <h3>This user doesn't have a favorite book set.</h3>
+    {% endif %}
+</div>
+{% endblock %}

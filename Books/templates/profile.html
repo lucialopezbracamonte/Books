@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>{{ current_user.username }}'s Profile</title>
+{% endblock %}
+
+{% block body %}
+<div class="profile-container">
+    <h1>{{ current_user.username }}'s Profile</h1>
+    
+    <h2>Your Favorite Book</h2>
+    
+    {% if current_user.favorite_book %}
+        <ul>
+            <h3>Your current favorite book:</h3>
+            <li class="favorite-book">
+                <img src="{{ current_user.favorite_book.thumbnail_url }}" alt="{{ current_user.favorite_book.title }}" width="50">
+                <strong>{{ current_user.favorite_book.title }} by {{ current_user.favorite_book.author }}</strong>
+                        <form method="POST" action="/edit_favorite/{{ current_user.favorite_book.id }}">
+            <button type="submit" name="submit" value="edit">Remove Book</button>
+        </form>
+            </li>
+        </ul>
+
+    {% else %}
+        <ul>
+            <h3>You don't have a current favorite book. Set one!</h3>
+        </ul>
+
+        <input type="text" placeholder="Search books..." name="query" class="search-input" hx-get="/search" hx-trigger="keyup changed delay:500ms" hx-target="#results">
+
+        <table id="results">
+            <!-- Results dynamically inserted here -->
+            
+        </table>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>{{ book.title }} Details</title>
+{% endblock %}
+
+{% block body %}
+<h1>{{ book.title }} by {{ book.author }}</h1>
+<img src="{{ book.thumbnail_url }}" alt="{{ book.title }}" width="200">
+<p>{{ book.description }}</p>
+
+<form method="POST">
+    <label for="list_type">Move to list:</label>
+    <select name="list_type" id="list_type" onchange="toggleRatingFields()">
+        <option value="Currently Reading" {% if user_book.list_type == 'Currently Reading' %}selected{% endif %}>Currently Reading</option>
+        <option value="To Be Read" {% if user_book.list_type == 'To Be Read' %}selected{% endif %}>To Be Read</option>
+        <option value="Read" {% if user_book.list_type == 'Read' %}selected{% endif %}>Read</option>
+    </select>
+
+    <div id="readFields" style="display: none;">
+        <label for="date_read">Date Read:</label>
+        <input type="date" name="date_read" id="date_read" value="{{ user_book.date_read | default('') }}">
+
+        <label for="star_rating">Star Rating:</label>
+        <input type="number" name="star_rating" id="star_rating" min="1" max="5" value="{{ user_book.star_rating | default('') }}">
+    </div>
+
+    <button type="submit">Update</button>
+</form>
+
+<script>
+    // Toggle the visibility of the rating fields based on the selected list
+    function toggleRatingFields() {
+        const listType = document.getElementById("list_type").value;
+        const readFields = document.getElementById("readFields");
+        if (listType === "Read") {
+            readFields.style.display = "block";
+        } else {
+            readFields.style.display = "none";
+        }
+    }
+
+    // Trigger the toggle function when the page loads to reflect the current list
+    window.onload = toggleRatingFields;
+</script>
+
+{% endblock %}

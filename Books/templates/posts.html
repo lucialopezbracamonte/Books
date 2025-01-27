@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block body %}
+  <h1>Posts</h1>
+  <ul>
+  {% for post in posts %}
+    <div class="post">
+      <li><img src="{{ post.book.thumbnail_url }}" alt="{{ post.book.title }}" width="50">
+        <a href="{{ url_for('other_profile', user_id=post.user.id) }}">{{ post.user.username }}</a>
+        {{ post.book.title }} by {{ post.book.author }} 
+        {% if post.star_rating %}
+            <div>
+                {% for i in range(post.star_rating) %}
+                    <img src="{{ url_for('static', filename='pictures/star.png') }}" alt="star" width="20">
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% if post.date_read %}
+            {{ post.date_read }}
+        {% endif %}
+    </li>
+    </div>
+  {% else %}
+  <h2>No Posts Yet</h2>
+  {% endfor %}
+</ul>
+{% endblock %}
+
+
+
+

@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>Home Page</title>
+{% endblock %}
+
+{% block body %}
+{% if current_user.is_authenticated %}
+
+<h1>Welcome, {{ current_user.username }}</h1>
+    
+<h2>Currently Reading</h2>
+<ul>
+    {% if books_by_list['Currently Reading']|length < 1 %}
+        <li>You aren't reading any books right now!</li>
+    {% else %}
+        {% for book, user_book in books_by_list['Currently Reading'] %}
+        <a href="{{ url_for('book_detail', book_id=book.id) }}">
+            <li><img src="{{ book.thumbnail_url }}" alt="{{ book.title }}" width="50">
+                {{ book.title }} by {{ book.author }}</li>
+            </a>
+        {% endfor %}
+    {% endif %}
+</ul>
+
+<h2>To Be Read</h2>
+<ul>
+    {% if books_by_list['To Be Read']|length < 1 %}
+        <li>You don't have any books to be read!</li>
+    {% else %}
+        {% for book, user_book in books_by_list['To Be Read'] %}
+        <a href="{{ url_for('book_detail', book_id=book.id) }}">
+            <li><img src="{{ book.thumbnail_url }}" alt="{{ book.title }}" width="50">
+                {{ book.title }} by {{ book.author }}</li>
+            </a>
+        {% endfor %}
+    {% endif %}
+</ul>
+
+<h2>Read</h2>
+<ul>
+    {% if books_by_list['Read']|length < 1 %}
+        <li>You don't have any finished books yet!</li>
+    {% else %}
+        {% for book, user_book in books_by_list['Read'] %}
+        <a href="{{ url_for('book_detail', book_id=book.id) }}">
+            <li><img src="{{ book.thumbnail_url }}" alt="{{ book.title }}" width="50">
+                {{ book.title }} by {{ book.author }} 
+                {% if user_book.star_rating %}
+                    <div>
+                        {% for i in range(user_book.star_rating) %}
+                            <img src="{{ url_for('static', filename='pictures/star.png') }}" alt="star" width="20">
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                {% if user_book.date_read %}
+                    {{ user_book.date_read }}
+                {% endif %}
+            </li>
+        </a>
+        {% endfor %}
+    {% endif %}
+</ul>
+
+<h2>Add a Book</h2>
+<form action="/search_books" method="POST" style="margin-left: 0;">
+    <input type="text" name="query" placeholder="Search for book" required>
+    <button type="submit">Search</button>
+</form>
+
+{% else %}
+<p>Please log in !!!</p>       
+
+{% endif %}
+{% endblock %}

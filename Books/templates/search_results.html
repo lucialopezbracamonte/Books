@@ -1,0 +1,18 @@
+{% if results %}
+    {% for book in results %}
+    <tr>
+        <td><img src="{{ book.thumbnail_url }}" alt="{{ book.title }}" width="50"></td>
+        <td>{{ book.title }}</td>
+        <td>{{ book.author }}</td>
+        <td>
+            <form method="POST" action="/edit_favorite/{{ book.id }}">
+                <button type="submit" name="submit" value="set">Set as Favorite</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+{% else %}
+    <tr>
+        <td colspan="3">No books found.</td>
+    </tr>
+{% endif %}

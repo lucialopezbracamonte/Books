@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>Your Reading Wrapped</title>
+
+{% endblock %}
+
+{% block body %}
+<h1>Your Reading Wrapped</h1>
+<p>Here's a summary of your reading year:</p>
+
+<div class="reading-summary">
+    <div class="stat">
+        <p>Total Books Read: <span class="value">{{ total_books }}</span></p>
+    </div>
+    <div class="stat">
+        <p>Average Rating: <span class="value">{{ average_rating | round(1) }}</span></p>
+    </div>
+    <div class="stat">
+        <p>Most Read Author: <span class="value">{{ most_read_author }}</span></p>
+    </div>
+    <div class="stat">
+        <p>Most Read Month: <span class="value">{{ most_read_month }}</span></p>
+    </div>
+</div>
+
+<div class="reading-summary">
+    <h3>Your Average Rating:</h3>
+    <h3>{{ average_rating }}</h3>
+    {% set rounded_rating = average_rating|round(0)|int %}
+    {% for i in range(rounded_rating) %}
+        <img src="/static/pictures/star.png" alt="star" width="25" />
+    {% endfor %}
+</div>
+
+<div class="chart-container">
+    <h3>Books Read Per Month</h3>
+    <canvas id="monthlyGraph"></canvas>
+</div>
+
+<!-- Script for Graph -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Data for the graph (months and book count per month)
+    var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    var monthlyReadCount = {{ monthly_read_count | tojson }};
+    
+    var monthData = {
+        labels: months,
+        datasets: [{
+            label: 'Books Read Per Month',
+            data: monthlyReadCount,
+            backgroundColor: '#ff6f61',
+            borderColor: '#f06292',
+            borderWidth: 2
+        }]
+    };
+
+    // Config for the graph
+    var config = {
+        type: 'bar',
+        data: monthData,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return tooltipItem.raw + ' books';
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            }
+        }
+    };
+
+    // Rendering the graph
+    var ctx = document.getElementById('monthlyGraph').getContext('2d');
+    new Chart(ctx, config);
+</script>
+{% endblock %}
