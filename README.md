@@ -3,12 +3,14 @@ Overview
 
 This project is a web-based tool designed to help users manage their book collections and reading experiences. The application allows users to log in, track books they are currently reading, books they want to read, and books they have already read, while also giving them the ability to rate books. Users can search for books using the Google Books API, have a current favorite book that is displayed on their profile for other users to see, and explore their reading history through detailed statistics and calendar views. Each time a user marks a book as completed, a post is automatically generated for other users to see with star rating and date read.
 
+
 Technologies Used
 Backend: Python, Flask
 Frontend: HTML, CSS, Javascript
 Database: SQLite (via SQLAlchemy)
 Frameworks: Flask for backend logic and routing, Flask-Login for user authentication, Chart.js for data visualization, AJAX for instant search functionality
 External API: Google Books API for book data search
+
 
 How It Works
 User Authentication: Users can register, log in, and log out to securely manage their book lists and posts.
@@ -20,6 +22,8 @@ Book Search: Users can search for books from the Google Books API and add them t
 Posts: After finishing a book, users select a star rating. Then a post is automatically created for other users to view.
 Reading Statistics: Users can view an overview of their reading habits, including total books read, average ratings, most-read author, and monthly reading trends.
 Calendar View: A calendar is provided to display the days on which the user read a book.
+
+
 Deployment URL:
 https://booksproject-7ab7ee507009.herokuapp.com
 
